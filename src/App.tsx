@@ -21,8 +21,10 @@ import {
   Upload,
   Eye,
   EyeOff,
-  FileJson
+  FileJson,
+  FileDown
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 // --- Types ---
 
@@ -158,7 +160,9 @@ export default function App() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showDetailedResponses, setShowDetailedResponses] = useState(false);
   const [activeInfoId, setActiveInfoId] = useState<number | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = SECTIONS.length + 2;
 
@@ -259,6 +263,107 @@ export default function App() {
     reader.readAsText(file);
     // Reset input
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDownloadPdf = (responsesOnly: boolean = false) => {
+    setIsGeneratingPdf(true);
+    
+    try {
+      const doc = new jsPDF();
+      const margin = 20;
+      let y = 20;
+
+      // Title
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.text(responsesOnly ? 'ISAA Assessment Responses' : 'ISAA Assessment Report', margin, y);
+      y += 10;
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, margin, y);
+      y += 15;
+
+      // Child Info
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Child Information', margin, y);
+      y += 7;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text(`Name: ${childInfo.name}`, margin, y);
+      y += 5;
+      doc.text(`Age: ${childInfo.age}`, margin, y);
+      y += 5;
+      doc.text(`DOB: ${childInfo.dob || 'N/A'}`, margin, y);
+      y += 5;
+      doc.text(`Place: ${childInfo.placeOfBirth || 'N/A'}`, margin, y);
+      y += 15;
+
+      if (!responsesOnly) {
+        // Results summary
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Assessment Results', margin, y);
+        y += 10;
+        
+        doc.setFontSize(12);
+        doc.text(`Total Score: ${totalScore}`, margin, y);
+        y += 7;
+        doc.text(`Interpretation: ${getInterpretation(totalScore).label}`, margin, y);
+        y += 15;
+      }
+
+      // Detailed Responses
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Detailed Responses', margin, y);
+      y += 10;
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+
+      SECTIONS.forEach((section) => {
+        // Check for page break
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        
+        doc.setFont('helvetica', 'bold');
+        doc.text(section.title, margin, y);
+        y += 7;
+        doc.setFont('helvetica', 'normal');
+
+        section.questions.forEach((q) => {
+          const answer = answers[q.id] || 0;
+          const optionLabel = OPTIONS.find(o => o.score === answer)?.label.split(' (')[0] || 'N/A';
+          
+          const text = `${q.id}. ${q.text}: ${answer} (${optionLabel})`;
+          const splitText = doc.splitTextToSize(text, 170);
+          
+          // Check for page break
+          if (y + (splitText.length * 5) > 280) {
+            doc.addPage();
+            y = 20;
+          }
+          
+          doc.text(splitText, margin, y);
+          y += (splitText.length * 5) + 2;
+        });
+        y += 5;
+      });
+
+      const fileName = responsesOnly 
+        ? `ISAA_Responses_${childInfo.name.replace(/\s+/g, '_') || 'Child'}.pdf`
+        : `ISAA_Report_${childInfo.name.replace(/\s+/g, '_') || 'Child'}.pdf`;
+      doc.save(fileName);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   return (
@@ -504,6 +609,7 @@ export default function App() {
             {step === totalSteps - 1 && (
               <motion.div
                 key="results"
+                ref={resultsRef}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="p-8 md:p-12 print:p-0"
@@ -517,6 +623,26 @@ export default function App() {
                     <p className="text-stone-500">Based on the ISAA scoring criteria</p>
                   </div>
                   <div className="flex flex-wrap justify-center gap-3">
+                    <button
+                      onClick={() => handleDownloadPdf(false)}
+                      disabled={isGeneratingPdf}
+                      className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-stone-900 text-stone-50 hover:bg-stone-800 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isGeneratingPdf ? (
+                        <div className="w-4 h-4 border-2 border-stone-50/30 border-t-stone-50 rounded-full animate-spin" />
+                      ) : (
+                        <FileDown size={18} />
+                      )}
+                      {isGeneratingPdf ? 'Generating...' : 'Download PDF'}
+                    </button>
+                    <button
+                      onClick={() => handleDownloadPdf(true)}
+                      disabled={isGeneratingPdf}
+                      className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-stone-100 text-stone-600 hover:bg-stone-200 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <FileDown size={18} />
+                      Responses Only
+                    </button>
                     <button
                       onClick={handleSaveJson}
                       className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-stone-100 text-stone-600 hover:bg-stone-200 transition-all shadow-sm"
