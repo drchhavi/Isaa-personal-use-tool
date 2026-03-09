@@ -36,6 +36,7 @@ interface ChildInfo {
 interface Question {
   id: number;
   text: string;
+  description?: string;
 }
 
 interface Section {
@@ -62,76 +63,76 @@ const SECTIONS: Section[] = [
     id: 'social',
     title: 'I. Social Relationship and Reciprocity',
     questions: [
-      { id: 1, text: 'Has poor eye contact' },
-      { id: 2, text: 'Lacks social smile' },
-      { id: 3, text: 'Remains aloof' },
-      { id: 4, text: 'Does not reach out to others' },
-      { id: 5, text: 'Unable to relate to people' },
-      { id: 6, text: 'Unable to respond to social/environmental cues' },
-      { id: 7, text: 'Engages in solitary and repetitive play activities' },
-      { id: 8, text: 'Unable to take turns in social interaction' },
-      { id: 9, text: 'Does not maintain peer relationships' },
+      { id: 1, text: 'Has poor eye contact', description: 'Individuals with autism avoid looking people in the eye. They are unable to maintain eye contact as expected for a given age or required of social norms. Eye contact may be unusual such as gazing for too long on one spot or looking sideways.' },
+      { id: 2, text: 'Lacks social smile', description: 'Individuals with autism do not smile when meeting people or in reciprocation. A smile that reflects social response and recognition cannot be elicited from such persons.' },
+      { id: 3, text: 'Remains aloof', description: 'Individuals with autism may remain aloof, self-absorbed, withdrawn, and not responsive to people or environment. They seem to be preoccupied with their self and be away from the social world around. They hardly respond to, or initiate contact with others. There is lack of age appropriate pretend play.' },
+      { id: 4, text: 'Does not reach out to others', description: 'Individuals with autism do not interact with other people and remain socially unresponsive. They do not initiate, seek, or respond to social interactions. They may not respond to their name, and even if they do, it may not be appropriate.' },
+      { id: 5, text: 'Unable to relate to people', description: 'Individuals with autism do not initiate contact with others and may not relate to people as expected of their age. Reminders are required to attune the individuals with autism to the presence of people and social situations.' },
+      { id: 6, text: 'Unable to respond to social/environmental cues', description: 'Individuals with autism are not responsive to social and environmental demands or expectations. They show behavior which is not synchronous with the demands/ requirements of the social environment.' },
+      { id: 7, text: 'Engages in solitary and repetitive play activities', description: 'Individuals with autism play alone most of the time or prefer solitary activities. They avoid playing with others and may not engage in group oriented activities or tasks at all.' },
+      { id: 8, text: 'Unable to take turns in social interaction', description: 'Individuals with autism do not comprehend the significance of taking turns in reciprocal interaction with others. They do not wait until their turn comes or the others\' turn ends.' },
+      { id: 9, text: 'Does not maintain peer relationships', description: 'Individuals with autism do not develop age appropriate friendships. They may not engage in age appropriate peer interactions or maintain peer relationships as is socially expected.' },
     ]
   },
   {
     id: 'emotional',
     title: 'II. Emotional Responsiveness',
     questions: [
-      { id: 10, text: 'Shows inappropriate emotional response' },
-      { id: 11, text: 'Shows exaggerated emotions' },
-      { id: 12, text: 'Engages in self-stimulating emotions' },
-      { id: 13, text: 'Lacks fear of danger' },
-      { id: 14, text: 'Excited or agitated for no apparent reason' },
+      { id: 10, text: 'Shows inappropriate emotional response', description: 'Persons with autism do not show the expected feeling in a social situation. They express inappropriate emotional responses like laughing when scolded or spanked and inappropriate degree of response like excessive crying or laughing that is unwarranted.' },
+      { id: 11, text: 'Shows exaggerated emotions', description: 'Persons with autism may show anxiety or fear which is excessive in nature and which may be triggered off without an apparent reason. At times, it may be exaggerated or atypical.' },
+      { id: 12, text: 'Engages in self-stimulating emotions', description: 'Individuals with autism may engage in self talk that is inappropriate for their age. The autistic individual may smile to self without any apparent reason.' },
+      { id: 13, text: 'Lacks fear of danger', description: 'Persons with autism may not show fear of hazards or dangers which others of the same age would show or know.' },
+      { id: 14, text: 'Excited or agitated for no apparent reason', description: 'Persons with autism may show excitement, over activity or agitation that is both excessive and unwarranted. The autistic child moves around with brisk energy and may be difficult to control.' },
     ]
   },
   {
     id: 'speech',
     title: 'III. Speech-Language and Communication',
     questions: [
-      { id: 15, text: 'Acquired speech and lost it' },
-      { id: 16, text: 'Has difficulty in using non-verbal language or gestures to communicate' },
-      { id: 17, text: 'Engages in stereotyped and repetitive use of language' },
-      { id: 18, text: 'Engages in echolalic speech' },
-      { id: 19, text: 'Produces infantile squeals/ unusual noises' },
-      { id: 20, text: 'Unable to initiate or sustain conversation with others' },
-      { id: 21, text: 'Uses jargon or meaningless words' },
-      { id: 22, text: 'Uses pronoun reversals' },
-      { id: 23, text: 'Unable to grasp pragmatics of communication (real meaning)' },
+      { id: 15, text: 'Acquired speech and lost it', description: 'Speech development is not age-appropriate. The autistic individual may have developed speech, but lost it subsequently. 50% of autistic may be mute.' },
+      { id: 16, text: 'Has difficulty in using non-verbal language or gestures to communicate', description: 'Persons with autism find it difficult to express their needs non-verbally and may also have difficulty in understanding the non-verbal language of others. Instead of gesturing or pointing, they may lead others to the desired object by dragging or pulling the latter\'s hand.' },
+      { id: 17, text: 'Engages in stereotyped and repetitive use of language', description: 'Persons with autism may repeat a word, phrase or sentence out of context. They repeat the same statement many times.' },
+      { id: 18, text: 'Engages in echolalic speech', description: 'Persons with autism may repeat or echo questions or statements made by other people. They may not understand that they have to answer the questions.' },
+      { id: 19, text: 'Produces infantile squeals/ unusual noises', description: 'Persons with autism may squeal, make bizarre noises and produce unintelligible speech like sounds. They may produce speech like sounds which lack meaning.' },
+      { id: 20, text: 'Unable to initiate or sustain conversation with others', description: 'Persons with autism may not be able to initiate or sustain conversation with others.' },
+      { id: 21, text: 'Uses jargon or meaningless words', description: 'Persons with autism may use strange or meaningless words which convey no meaning.' },
+      { id: 22, text: 'Uses pronoun reversals', description: 'Persons with autism may show difficulty in the use of pronouns. They frequently reverse pronouns such as “I” for “You”.' },
+      { id: 23, text: 'Unable to grasp pragmatics of communication (real meaning)', description: 'Persons with autism have difficulty in understanding the true intent of speech of others. They may not understand the pragmatics of speech communication.' },
     ]
   },
   {
     id: 'behavior',
     title: 'IV. Behaviour Patterns',
     questions: [
-      { id: 24, text: 'Engages in stereotyped and repetitive motor mannerisms' },
-      { id: 25, text: 'Shows attachment to inanimate objects' },
-      { id: 26, text: 'Shows hyperactivity/restlessness' },
-      { id: 27, text: 'Exhibits aggressive behavior' },
-      { id: 28, text: 'Throws temper tantrums' },
-      { id: 29, text: 'Engages in self-injurious behavior' },
-      { id: 30, text: 'Insists on sameness' },
+      { id: 24, text: 'Engages in stereotyped and repetitive motor mannerisms', description: 'Persons with autism may engage in self-stimulatory behavior in the form of flapping of hands or fingers, body rocking or using an object for this purpose.' },
+      { id: 25, text: 'Shows attachment to inanimate objects', description: 'Individuals with autism may be staunchly attached to certain inanimate objects which they insist on keeping with themselves such as string, rock, pen, stick, toy, bottle and the like.' },
+      { id: 26, text: 'Shows hyperactivity/restlessness', description: 'Individuals with autism may be restless with boundless energy which makes it difficult for others to control them. The hyperactivity interferes with their learning and performance of tasks.' },
+      { id: 27, text: 'Exhibits aggressive behavior', description: 'Persons with autism may show unprovoked aggression and socially inappropriate behavior such as hitting, kicking and pinching.' },
+      { id: 28, text: 'Throws temper tantrums', description: 'Individuals with autism may show temper tantrums in the form of head banging, screaming, and yelling etc. Such behaviors are emitted when frustrated.' },
+      { id: 29, text: 'Engages in self-injurious behavior', description: 'Persons with autism may indulge in self-injurious behaviors like biting, hitting or mutilating self. Such individuals have to be constantly supervised to prevent them injuring themselves.' },
+      { id: 30, text: 'Insists on sameness', description: 'Persons with autism may resist change in their routine and insist that things be the same as they were. Such individuals may insist on continuing the same activity and it would be very difficult to distract them from such repetitive activities.' },
     ]
   },
   {
     id: 'sensory',
     title: 'V. Sensory Aspects',
     questions: [
-      { id: 31, text: 'Unusually sensitive to sensory stimuli' },
-      { id: 32, text: 'Stares into space for long periods of time' },
-      { id: 33, text: 'Has difficulty in tracking objects' },
-      { id: 34, text: 'Has unusual vision' },
-      { id: 35, text: 'Insensitive to pain' },
-      { id: 36, text: 'Responds to objects/people unusually by smelling, touching or tasting' },
+      { id: 31, text: 'Unusually sensitive to sensory stimuli', description: 'Persons with autism may react strongly to certain sounds, light, touch or tastes by closing their ears, eyes or refusing to eat food of certain consistency. They may actively avoid certain sensory stimuli.' },
+      { id: 32, text: 'Stares into space for long periods of time', description: 'Persons with autism may stare at some distant spot or space for long periods of time. They seem to be unaware of surroundings when thus occupied.' },
+      { id: 33, text: 'Has difficulty in tracking objects', description: 'Persons with autism may have difficulty in tracking objects or persons in motion. They are unable to follow or fix their gaze on moving objects or persons for the required period of time.' },
+      { id: 34, text: 'Has unusual vision', description: 'Persons with autism may be able to observe tiny details which may not be apparent to others. Such individuals focus their attention on some insignificant part of an object that is generally ignored by others.' },
+      { id: 35, text: 'Insensitive to pain', description: 'Persons with autism may hardly react to pain. They seem not to be distressed or cry when hurt. They seem to have high thresholds for pain.' },
+      { id: 36, text: 'Responds to objects unusually by smelling, touching or tasting', description: 'Individuals with autism may go around exploring their environment by smelling, touching or tasting objects. Some of them may not show appropriate use of objects or toys.' },
     ]
   },
   {
     id: 'cognitive',
     title: 'VI. Cognitive Aspects',
     questions: [
-      { id: 37, text: 'Inconsistent attention and concentration' },
-      { id: 38, text: 'Shows delay in responding' },
-      { id: 39, text: 'Has unusual memory of some kind' },
-      { id: 40, text: 'Has \'savant\' ability' },
+      { id: 37, text: 'Inconsistent attention and concentration', description: 'It is difficult to arouse the attention of individuals with autism. They do not concentrate, and if they do, then it may not be on relevant aspects of the object or event. As a result of this, they may be inconsistent in their response.' },
+      { id: 38, text: 'Shows delay in responding', description: 'Persons with autism do not respond to instructions promptly or respond after a considerable delay. Quick response to instructions is hardly ever to be expected.' },
+      { id: 39, text: 'Has unusual memory of some kind', description: 'Persons with autism may show memory for things which most of the individuals would have long forgotten. Some of them have exceptional ability to remember things from the distant past.' },
+      { id: 40, text: 'Has \'savant\' ability', description: 'Persons with autism may have special or unusual ability in some areas like reading early, mathematical feats or artistic talent. Some of them may show superior ability, but in a restricted field of interest.' },
     ]
   }
 ];
@@ -156,6 +157,7 @@ export default function App() {
   });
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showDetailedResponses, setShowDetailedResponses] = useState(false);
+  const [activeInfoId, setActiveInfoId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const totalSteps = SECTIONS.length + 2;
@@ -418,11 +420,40 @@ export default function App() {
                 <div className="space-y-10">
                   {SECTIONS[step - 1].questions.map((q, idx) => (
                     <div key={q.id} className="space-y-4">
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 items-start">
                         <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-stone-100 text-stone-500 flex items-center justify-center font-mono text-sm">
                           {q.id}
                         </span>
-                        <p className="text-lg font-medium pt-0.5">{q.text}</p>
+                        <div className="flex-grow">
+                          <div className="flex items-center gap-2">
+                            <p className="text-lg font-medium pt-0.5">{q.text}</p>
+                            {q.description && (
+                              <button
+                                onClick={() => setActiveInfoId(activeInfoId === q.id ? null : q.id)}
+                                className={`p-1 rounded-full transition-colors ${
+                                  activeInfoId === q.id ? 'bg-stone-900 text-stone-50' : 'text-stone-400 hover:bg-stone-100'
+                                }`}
+                                title="Click for more information"
+                              >
+                                <Info size={16} />
+                              </button>
+                            )}
+                          </div>
+                          <AnimatePresence>
+                            {activeInfoId === q.id && q.description && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="mt-2 p-4 bg-stone-50 rounded-xl border border-stone-200 text-sm text-stone-600 leading-relaxed italic">
+                                  {q.description}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
                       </div>
                       
                       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 ml-12">
