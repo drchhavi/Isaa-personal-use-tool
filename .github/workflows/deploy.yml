@@ -1,38 +1,42 @@
-name: Deploy to GitHub Pages
+name: Deploy Vite site to Pages
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: Clean install deps
-        run: |
-          rm -rf node_modules
-          rm -f package-lock.json
-          npm cache clean --force
-          npm install --no-optional
+      - run: npm install
 
-      - name: Build
-        run: npm run build
+      - run: npm run build
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
-          folder: dist
-          branch: gh-pages
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
