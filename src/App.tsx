@@ -25,6 +25,7 @@ import {
   FileDown
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import * as XLSX from 'xlsx';
 
 // --- Types ---
 
@@ -162,6 +163,7 @@ export default function App() {
   const [activeInfoId, setActiveInfoId] = useState<number | null>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const excelAppendInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = SECTIONS.length + 2;
@@ -263,6 +265,69 @@ export default function App() {
     reader.readAsText(file);
     // Reset input
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const getAssessmentRow = () => {
+    const row: any = {
+      'Date': new Date().toLocaleString(),
+      'Name': childInfo.name,
+      'Age': childInfo.age,
+      'DOB': childInfo.dob,
+      'Place of Birth': childInfo.placeOfBirth,
+      'Total Score': totalScore,
+      'Interpretation': getInterpretation(totalScore).label,
+    };
+
+    // Add individual question scores
+    SECTIONS.forEach(section => {
+      section.questions.forEach(q => {
+        row[`Q${q.id}: ${q.text}`] = answers[q.id] || 0;
+      });
+    });
+
+    return row;
+  };
+
+  const handleExportExcel = () => {
+    const row = getAssessmentRow();
+    const worksheet = XLSX.utils.json_to_sheet([row]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Assessments");
+    XLSX.writeFile(workbook, `ISAA_${childInfo.name.replace(/\s+/g, '_') || 'Child'}_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
+  const handleAppendExcel = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        
+        // Convert existing sheet to JSON
+        const existingData = XLSX.utils.sheet_to_json(worksheet);
+        
+        // Append new row
+        const newRow = getAssessmentRow();
+        const updatedData = [...existingData, newRow];
+        
+        // Create new workbook with updated data
+        const newWorksheet = XLSX.utils.json_to_sheet(updatedData);
+        const newWorkbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, firstSheetName);
+        
+        XLSX.writeFile(newWorkbook, file.name);
+      } catch (err) {
+        alert('Error processing Excel file. Please make sure it is a valid .xlsx file.');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    // Reset input
+    if (excelAppendInputRef.current) excelAppendInputRef.current.value = '';
   };
 
   const handleDownloadPdf = (responsesOnly: boolean = false) => {
@@ -650,6 +715,29 @@ export default function App() {
                       <Download size={18} />
                       Save JSON
                     </button>
+                    <button
+                      onClick={handleExportExcel}
+                      className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-md"
+                    >
+                      <Download size={18} />
+                      New Excel
+                    </button>
+                    <div className="relative">
+                      <input 
+                        type="file" 
+                        ref={excelAppendInputRef} 
+                        onChange={handleAppendExcel} 
+                        accept=".xlsx" 
+                        className="hidden" 
+                      />
+                      <button
+                        onClick={() => excelAppendInputRef.current?.click()}
+                        className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-all shadow-sm"
+                      >
+                        <Upload size={18} />
+                        Append Excel
+                      </button>
+                    </div>
                     <button
                       onClick={() => setShowDetailedResponses(!showDetailedResponses)}
                       className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm ${
